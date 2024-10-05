@@ -8,9 +8,13 @@ import React from 'react';
 
 function App() {
     return (
+      <div>{/* 
+      <div style={{ margin: 0, padding: 0, overflow: 'hidden' }}>
+      <SolarSystem />
+      </div> */}
       <div>
         <Header/>
-      </div>
+      </div></div>
     );
 }
 
