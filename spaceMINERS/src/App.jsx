@@ -1,13 +1,21 @@
+
 import './App.css'
 import Header from './components/header/header'
 
-function App() {
+import React from 'react';
+import SolarSystem from './components/3dModel/SolarSystem';
 
-  return (
+
+function App() {
+    return (
+        <div style={{ margin: 0, padding: 0, overflow: 'hidden' }}>
+            <SolarSystem />
+            
       <div>
         <Header/>
       </div>
-  )
+        </div>
+    );
 }
 
-export default App
+export default App;
