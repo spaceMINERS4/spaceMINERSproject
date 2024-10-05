@@ -402,6 +402,11 @@ import jupiterTexture from '../../assets/Images/jupiter.jpg';
 import saturnTexture from '../../assets/Images/saturn.jpg';
 import uranusTexture from '../../assets/Images/uranus.jpg';
 import neptuneTexture from '../../assets/Images/neptune.jpg';
+import sunlight from '../../assets/Images/sunlight.png';
+
+import saturnring from '../../assets/Images/saturnring.png';
+import uranusring from '../../assets/Images/uranusring.png';
+import ORBID01 from '../../assets/Images/ORBID01.svg';
 
 // Keplerian elements for the planets
 const planetaryData = {
@@ -439,21 +444,64 @@ const SolarSystem = () => {
 
         // Lighting
         
-        const ambientLight = new THREE.AmbientLight(0xffffff);
+        const ambientLight = new THREE.AmbientLight(0xdddddd, 1);
         scene.add(ambientLight); 
 
+        
         const pointLight = new THREE.PointLight(0xFF006B, 3, 1000);
-
-        pointLight.position.set(0, 300, 100);
         scene.add(pointLight);
+
 
         // Add the Sun
         const textureLoader = new THREE.TextureLoader();
-        const sunGeo = new THREE.SphereGeometry(12, 32, 32);
+        const sunGeo = new THREE.SphereGeometry(10, 32, 32);
         const sunMat = new THREE.MeshBasicMaterial({ map: textureLoader.load(sunTexture) });
         const sun = new THREE.Mesh(sunGeo, sunMat);
         scene.add(sun);
 
+        const sunLight = new THREE.PointLight(0xffffff, 3, 2000); 
+        sunLight.position.set(0, 0, 0); 
+        scene.add(sunLight); 
+
+        
+        const planeTexture = new THREE.TextureLoader().load(sunlight); 
+        const planeGeometry = new THREE.PlaneGeometry(30, 30); 
+        const planeMaterial = new THREE.MeshBasicMaterial({
+            map: planeTexture,
+            transparent: true,  
+            side: THREE.DoubleSide 
+        });
+        
+        const backgroundPlane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+        backgroundPlane.position.set(0, 0, 0);  
+
+        scene.add(backgroundPlane);
+
+        
+        const saturnRingTexture = new THREE.TextureLoader().load(saturnring); 
+        const saturnringGeometry = new THREE.PlaneGeometry(40, 40); 
+        const saturnringMaterial = new THREE.MeshBasicMaterial({
+            map: saturnRingTexture,
+            transparent: true,  
+            side: THREE.DoubleSide 
+        });
+
+        const saturnRing = new THREE.Mesh(saturnringGeometry, saturnringMaterial);
+ 
+        
+        const uranusringTexture = new THREE.TextureLoader().load(uranusring); 
+        const uranusringGeometry = new THREE.PlaneGeometry(40, 40); 
+        const uranusringMaterial = new THREE.MeshBasicMaterial({
+            map: uranusringTexture,
+            transparent: true,  
+            side: THREE.DoubleSide 
+        });
+
+        const uranusRing = new THREE.Mesh(uranusringGeometry, uranusringMaterial);
+ 
+        const ORBID01Texture = new THREE.TextureLoader().load(ORBID01);
+ 
         // Planet sizes (scaled for visibility)
         const planetSizes = {
             mercury: 1.0,
@@ -517,7 +565,8 @@ const SolarSystem = () => {
 
             const xeclip = r * (Math.cos(longNode) * Math.cos(v + longPeri - longNode) - Math.sin(longNode) * Math.sin(v + longPeri - longNode) * Math.cos(I));
             const yeclip = r * (Math.sin(longNode) * Math.cos(v + longPeri - longNode) + Math.cos(longNode) * Math.sin(v + longPeri - longNode) * Math.cos(I));
-            const zeclip = r * (Math.sin(v + longPeri - longNode) * Math.sin(I));
+            /* const zeclip = r * (Math.sin(v + longPeri - longNode) * Math.sin(I)); */
+            const zeclip = 0
 
             return { x: xeclip, y: yeclip, z: zeclip };
         }
@@ -527,9 +576,39 @@ const SolarSystem = () => {
         function animate() {
             const delta = clock.getDelta();
             const julianDate = J2000 + (delta / 86400);
+
+            backgroundPlane.quaternion.copy(camera.quaternion); // Aligns the plane with the camera's rotation without allowing it to rotate independently
+    
             Object.keys(planets).forEach(planetName => {
                 const position = computePlanetPosition(planetaryData[planetName], julianDate);
                 planets[planetName].position.set(position.x, position.y, position.z);
+                if(planetName === "saturn"){
+                    
+                    saturnRing.position.set(position.x, position.y, position.z); 
+
+                    scene.add(saturnRing);
+                }
+                if(planetName === "uranus"){
+                    
+                    uranusRing.position.set(position.x, position.y, position.z);  
+
+                    scene.add(uranusRing);
+                } 
+                const taille = Math.sqrt(position.x**2 + position.y**2) * 2;
+                
+                const ORBID01Geometry = new THREE.PlaneGeometry(taille, taille); 
+                const ORBID01Material = new THREE.MeshBasicMaterial({
+                    map: ORBID01Texture,
+                    transparent: true,  
+                    side: THREE.DoubleSide 
+                });
+
+                const ORBID = new THREE.Mesh(ORBID01Geometry, ORBID01Material);
+                
+                ORBID.position.set(0, 0, 0);  
+
+                scene.add(ORBID); 
+                  
             });
 
             renderer.render(scene, camera);
