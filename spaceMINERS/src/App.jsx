@@ -1,14 +1,22 @@
-import './App.css';
-import Header from './components/header/header';
-import NEOVisualization from './components/3Dmodel/asteroid.jsx';
+import './App.css'
+import First from './pages/first/first';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
 import React from 'react';
+import Second from './pages/second/second';
 
 function App() {
     return (
-        <div style={{ margin: 0, padding: 0, overflow: 'hidden' }}>
-            <Header />
-            <NEOVisualization />
-        </div>
+
+      <div>
+      <Router>
+        <Routes>
+        <Route path="/" element={<First />} />
+        <Route path="/second" element={<Second />} />
+        </Routes>
+      </Router>
+      </div>
+
     );
 }
 
