@@ -386,6 +386,11 @@ import React, { useEffect } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
+//i imported these idk if i need them
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+
 // Import textures
 import starsTexture from '../../assets/Images/stars.jpg';
 import sunTexture from '../../assets/Images/sun.jpg';
@@ -433,29 +438,32 @@ const SolarSystem = () => {
         ]);
 
         // Lighting
-        const ambientLight = new THREE.AmbientLight(0x333333);
-        scene.add(ambientLight);
+        
+        const ambientLight = new THREE.AmbientLight(0xffffff);
+        scene.add(ambientLight); 
 
-        const pointLight = new THREE.PointLight(0xffffff, 3, 500);
+        const pointLight = new THREE.PointLight(0xFF006B, 3, 1000);
+
+        pointLight.position.set(0, 300, 100);
         scene.add(pointLight);
 
         // Add the Sun
         const textureLoader = new THREE.TextureLoader();
-        const sunGeo = new THREE.SphereGeometry(16, 32, 32);
+        const sunGeo = new THREE.SphereGeometry(12, 32, 32);
         const sunMat = new THREE.MeshBasicMaterial({ map: textureLoader.load(sunTexture) });
         const sun = new THREE.Mesh(sunGeo, sunMat);
         scene.add(sun);
 
         // Planet sizes (scaled for visibility)
         const planetSizes = {
-            mercury: 3.0,
-            venus: 5.0,
-            earth: 5.0,
-            mars: 4.0,
+            mercury: 1.0,
+            venus: 2.0,
+            earth: 2.0,
+            mars: 1.1,
             jupiter: 10.0,
             saturn: 8.0,
-            uranus: 6.0,
-            neptune: 6.0
+            uranus: 5.0,
+            neptune: 5.0
         };
 
         // Planet textures
