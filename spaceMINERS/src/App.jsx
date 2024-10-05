@@ -1,5 +1,5 @@
 import React from 'react';
-import SolarSystem from './components/3dModel/SolarSystem';
+import SolarSystem from './components/3dModel/model.js';
 
 
 function App() {
