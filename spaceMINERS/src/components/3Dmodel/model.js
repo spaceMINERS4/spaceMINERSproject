@@ -433,7 +433,7 @@ const SolarSystem = () => {
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
         const orbit = new OrbitControls(camera, renderer.domElement);
-        camera.position.set(0, -600, 200); // Adjusted camera position
+        camera.position.set(0, -100, 20); // Adjusted camera position
         orbit.update();
 
         // Set background
@@ -458,10 +458,10 @@ const SolarSystem = () => {
         const sunMat = new THREE.MeshBasicMaterial({ map: textureLoader.load(sunTexture) });
         const sun = new THREE.Mesh(sunGeo, sunMat);
         scene.add(sun);
-
+/* 
         const sunLight = new THREE.PointLight(0xffffff, 3, 2000); 
         sunLight.position.set(0, 0, 0); 
-        scene.add(sunLight); 
+        scene.add(sunLight);  */
 
         
         const planeTexture = new THREE.TextureLoader().load(sunlight); 
