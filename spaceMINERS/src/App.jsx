@@ -1,7 +1,7 @@
 
 import './App.css'
 import Header from './components/header/header'
-
+import SolarSystem from './components/3Dmodel/model';
 import React from 'react';
 
 
@@ -13,6 +13,7 @@ function App() {
       </div> */}
       <div>
         <Header/>
+        <SolarSystem/>
       </div></div>
     );
 }
