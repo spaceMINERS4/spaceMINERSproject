@@ -4,7 +4,7 @@ import SolarSystem from '../../components/3Dmodel/model';
 const Second = () => {
     return(
         <div>
-      <SolarSystem/>
+            <SolarSystem/>
         </div>
     );
 }
