@@ -382,8 +382,6 @@ function animate() {
 
 animate();
 */
-
-
 import React, { useEffect } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -424,38 +422,40 @@ const SolarSystem = () => {
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
-
         const orbit = new OrbitControls(camera, renderer.domElement);
-        camera.position.set(-150, 200, 300);
+        camera.position.set(0, 100, 300); // Adjusted camera position
         orbit.update();
 
         // Set background
         const cubeTextureLoader = new THREE.CubeTextureLoader();
-        scene.background = cubeTextureLoader.load([starsTexture, starsTexture, starsTexture, starsTexture, starsTexture, starsTexture]);
+        scene.background = cubeTextureLoader.load([
+            starsTexture, starsTexture, starsTexture, starsTexture, starsTexture, starsTexture
+        ]);
 
         // Lighting
         const ambientLight = new THREE.AmbientLight(0x333333);
         scene.add(ambientLight);
+
         const pointLight = new THREE.PointLight(0xffffff, 3, 500);
         scene.add(pointLight);
 
         // Add the Sun
-        const textureload = new THREE.TextureLoader();
+        const textureLoader = new THREE.TextureLoader();
         const sunGeo = new THREE.SphereGeometry(16, 32, 32);
-        const sunMat = new THREE.MeshBasicMaterial({ map: textureload.load(sunTexture) });
+        const sunMat = new THREE.MeshBasicMaterial({ map: textureLoader.load(sunTexture) });
         const sun = new THREE.Mesh(sunGeo, sunMat);
         scene.add(sun);
 
-        // Planet sizes
+        // Planet sizes (scaled for visibility)
         const planetSizes = {
-            mercury: 5.0,
-            venus: 6.2,
-            earth: 6.0,
-            mars: 5.1,
-            jupiter: 18,
-            saturn: 16,
-            uranus: 9.0,
-            neptune: 9.0
+            mercury: 3.0,
+            venus: 5.0,
+            earth: 5.0,
+            mars: 4.0,
+            jupiter: 10.0,
+            saturn: 8.0,
+            uranus: 6.0,
+            neptune: 6.0
         };
 
         // Planet textures
@@ -470,6 +470,7 @@ const SolarSystem = () => {
             neptune: neptuneTexture
         };
 
+        
         // Create planets and their positions
         const planets = {};
         Object.keys(planetaryData).forEach(planetName => {
@@ -484,9 +485,9 @@ const SolarSystem = () => {
         // Function to compute planet position based on Keplerian elements
         function computePlanetPosition(planet, julianDate) {
             const T = (julianDate - J2000) / 36525;
-            const a = planet.a + planet.rates.a * T;
-            const e = planet.e + planet.rates.e * T;
-            const I = THREE.MathUtils.degToRad(planet.I + planet.rates.I * T);
+            const a = planet.a * 50; // Scale factor for semi-major axis (AU to pixels)
+            const e = planet.e;
+            const I = THREE.MathUtils.degToRad(planet.I);
             const L = planet.L + planet.rates.L * T;
             const longPeri = planet.longPeri + planet.rates.longPeri * T;
             const longNode = planet.longNode + planet.rates.longNode * T;
@@ -500,43 +501,53 @@ const SolarSystem = () => {
                 E -= delta / (1 - e * Math.cos(E));
             } while (Math.abs(delta) > 1e-6);
 
-            const x = a * (Math.cos(E) - e);
-            const y = a * Math.sqrt(1 - e * e) * Math.sin(E);
-            const r = Math.sqrt(x * x + y * y);
+            const x_orb = a * (Math.cos(E) - e);
+            const y_orb = a * Math.sqrt(1 - e ** 2) * Math.sin(E);
 
-            const x_orbit = r * (Math.cos(longNode) * Math.cos(longPeri + E) - Math.sin(longNode) * Math.sin(longPeri + E) * Math.cos(I));
-            const y_orbit = r * (Math.sin(longNode) * Math.cos(longPeri + E) + Math.cos(longNode) * Math.sin(longPeri + E) * Math.cos(I));
-            const z_orbit = r * (Math.sin(longPeri + E) * Math.sin(I));
+            const r = Math.sqrt(x_orb ** 2 + y_orb ** 2);
+            const v = Math.atan2(y_orb, x_orb);
 
-            return new THREE.Vector3(x_orbit, y_orbit, z_orbit);
+            const xeclip = r * (Math.cos(longNode) * Math.cos(v + longPeri - longNode) - Math.sin(longNode) * Math.sin(v + longPeri - longNode) * Math.cos(I));
+            const yeclip = r * (Math.sin(longNode) * Math.cos(v + longPeri - longNode) + Math.cos(longNode) * Math.sin(v + longPeri - longNode) * Math.cos(I));
+            const zeclip = r * (Math.sin(v + longPeri - longNode) * Math.sin(I));
+
+            return { x: xeclip, y: yeclip, z: zeclip };
         }
 
-        let clock = new THREE.Clock();
-        const animate = () => {
-            requestAnimationFrame(animate);
-            const time = clock.getElapsedTime();
-            const julianDate = J2000 + time / 365.25;
-
-            // Update positions of planets
+        // Animation loop
+        const clock = new THREE.Clock();
+        function animate() {
+            const delta = clock.getDelta();
+            const julianDate = J2000 + (delta / 86400);
             Object.keys(planets).forEach(planetName => {
-                const planetPosition = computePlanetPosition(planetaryData[planetName], julianDate);
-                planets[planetName].position.copy(planetPosition);
+                const position = computePlanetPosition(planetaryData[planetName], julianDate);
+                planets[planetName].position.set(position.x, position.y, position.z);
             });
 
             renderer.render(scene, camera);
-            orbit.update();
-        };
+            requestAnimationFrame(animate);
+        }
 
         animate();
 
-        // Clean up
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        });
+
         return () => {
-            document.body.removeChild(renderer.domElement);
+            // Cleanup
             renderer.dispose();
+            document.body.removeChild(renderer.domElement);
+            window.removeEventListener('resize', () => {});
         };
     }, []);
 
-    return null; // No JSX to return, as we are rendering directly to the body
+    return null; // Since the rendering is done in the effect, we return null
 };
 
 export default SolarSystem;
