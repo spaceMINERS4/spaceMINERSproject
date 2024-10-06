@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from datetime import datetime
+from mpl_toolkits.mplot3d import Axes3D
 
 # Load the dataset
 df = pd.read_csv("convertcsv.csv")
@@ -96,7 +97,8 @@ ax.set_title('Celestial Bodies Motion Animation')
 # Initialize the scatter plot for celestial bodies
 scat = ax.scatter([], [], [], s=10)
 
-# Draw the orbits for each celestial body
+# Draw the orbits for each celestial body and create a text label for each
+text_labels = []
 for index, row in celestial_df.iterrows():
     e = row['e']
     q = row['q_au_1']  # Perihelion distance
@@ -105,10 +107,10 @@ for index, row in celestial_df.iterrows():
     omega = row['w_deg']  # Argument of perihelion
     Omega = row['node_deg']  # Longitude of ascending node
     inclination = row['i_deg']  # Inclination
-    
+
     # Create 100 points around the orbit for plotting
     orbit_anomalies = np.linspace(0, 2 * np.pi, 100)
-    
+
     # Calculate the orbit path
     x_orbit, y_orbit, z_orbit = [], [], []
     for anomaly in orbit_anomalies:
@@ -117,15 +119,19 @@ for index, row in celestial_df.iterrows():
         x_orbit.append(x)
         y_orbit.append(y)
         z_orbit.append(z)
-    
+
     # Plot the orbit in 3D
     ax.plot(x_orbit, y_orbit, z_orbit, 'lightgrey', alpha=0.5)
+
+    # Create a text label for the celestial body
+    text = ax.text(0, 0, 0, row['object'], color='blue')  # Default position will be updated later
+    text_labels.append(text)
 
 # Animation function
 def update(frame):
     x_data, y_data, z_data = [], [], []
     
-    for _, row in celestial_df.iterrows():
+    for idx, row in celestial_df.iterrows():
         e = row['e']
         q = row['q_au_1']  # Perihelion distance
         a = q / (1 - e)  # Semi-major axis
@@ -141,9 +147,12 @@ def update(frame):
         y_data.append(y)
         z_data.append(z)
 
+        # Update text label positions
+        text_labels[idx].set_position((x, y, z + 0.5))  # Offset the text slightly above the comet
+
     # Update scatter plot data
     scat._offsets3d = (x_data, y_data, z_data)
-    return scat,
+    return scat, *text_labels  # Return updated scatter and text labels
 
 # Create the animation
 duration_days = 3000  # Total animation duration
