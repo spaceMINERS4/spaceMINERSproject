@@ -1,4 +1,4 @@
-const solarSystemFacts = [
+export const solarSystemFacts = [
     {
       planet: "Mercury",
       fact: "Mercury is the smallest planet in the solar system and has no atmosphere, causing extreme temperature fluctuations."
