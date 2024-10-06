@@ -1,5 +1,7 @@
 import './second.css'
+import Asteroids from '../../components/3Dmodel/asteroidsOuiam';
 import SolarSystem from '../../components/3Dmodel/model';
+
 import Header from '../../components/header/header';
 
 const Second = () => {
@@ -7,7 +9,7 @@ const Second = () => {
         <div>
             <Header/>
             <div className='second1'>
-                <SolarSystem/>
+                <Asteroids/>
             </div>
         </div>
     );
