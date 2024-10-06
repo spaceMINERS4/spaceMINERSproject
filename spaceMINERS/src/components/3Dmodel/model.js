@@ -571,6 +571,7 @@ const SolarSystem = () => {
             return { x: xeclip, y: yeclip, z: zeclip };
         }
 
+        
         // Animation loop
         const clock = new THREE.Clock();
         function animate() {
