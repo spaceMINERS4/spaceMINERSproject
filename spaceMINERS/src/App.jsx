@@ -1,4 +1,6 @@
 import './App.css'
+import '../src/assets/css/customerCursor.css';
+
 import First from './pages/first/first';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -9,7 +11,7 @@ import Third from './pages/third/third';
 function App() {
     return (
 
-      <div>
+      <div className="custom-cursor">
       <Router>
         <Routes>
         <Route path="/" element={<First />} />
