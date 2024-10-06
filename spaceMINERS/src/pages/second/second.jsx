@@ -1,5 +1,5 @@
 import './second.css'
-import Asteroids from '../../components/3Dmodel/asteroids';
+import Asteroids from '../../components/3Dmodel/asteroidFAZ';
 import SolarSystem from '../../components/3Dmodel/model';
 
 import Header from '../../components/header/header';
