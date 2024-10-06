@@ -1,0 +1,157 @@
+.bg1{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+    animation: zoomMove 30s ease-in-out infinite;
+}
+
+@keyframes zoomMove {
+    0% {
+        transform: scale(1) translateY(0);
+    }
+    100% {
+        transform: scale(1.1) translateY(-100px) rotate(10deg);
+    }
+}
+
+.gp{
+    border-radius: 200px;
+    width: 7vw;
+    height: 7vw;
+    border: 1px solid white;
+}
+
+.nasa{
+    height: 7vw;
+}
+
+.pc1{
+    display: flex;
+    gap: 1vw;
+}
+
+.everything{
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    width: 100vw;
+}
+
+.everything h2{
+    font-size: 40px;
+    font-weight: bold;
+    font-family: "Arial", "Helvetica", sans-serif; 
+    margin: 0;
+    padding: 10px;
+    color: white;
+}
+.everything h5{
+    font-size: 50px;
+    font-family: "Poiret One", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    margin: 0;
+    margin-top: 40px;
+    padding: 10px;
+    color: white;
+}
+.everything h3{
+    background-color: rgba(0,0,0,0.3);
+    font-size: 20px;
+    font-family: "Arial", "Helvetica", sans-serif; 
+    font-weight: THIN;
+    margin: 0;
+    margin-top: 40px;
+    padding: 10px 30px;
+    border-radius: 100px;
+    border: 1px solid white;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    color: white;
+    transition: font-size 0.3s ease, background-color 0.3s ease, padding 0.3s ease; 
+}
+.everything h3:hover{
+    font-size: 21px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+.blockAboutUs{
+    display:flex;
+    gap:70px;
+    background-color: rgba(128, 128, 128, 0.7); 
+    padding: 70px; 
+    border-radius: 10px; 
+    border: 8px solid rgba(61, 61, 61, 0.7); 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    gap: 10px; 
+    margin-bottom:50px;
+
+}
+
+.About{
+    display:flex;
+    flex-direction: column;
+    gap:40px;
+    
+}
+
+.Aboutgp{
+    border-radius: 200px;
+    width: 10vw;
+    height: 10vw;
+    border: 1px solid white;
+    cursor:pointer;
+}
+
+
+.def{
+    
+    justify-content: center;
+    align-items:center;
+    font-size: 10px;
+    
+    font-family: "Arial", "Helvetica", sans-serif; 
+    margin: 0;
+    padding: 10px;
+    color: white;
+}
+
+
+.allAboutUs {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    width: 100vw;
+    min-height: 100vh; /* Ensures it takes the full viewport height */
+    position: relative; /* Needed for the background image */
+    margin-top: 70px; /* Adjust margin if needed */
+}
+
+.CelestialAnimation  {
+    border: 5px solid #ffffff; /* White border */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Shadow effect */
+    transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
+.CelestialAnimation:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+h5{
+    font-size: 50px;
+    font-family: "Poiret One", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    margin: 0;
+    margin-top: 40px;
+    padding: 10px;
+    color: white;
+}

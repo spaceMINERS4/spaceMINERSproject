@@ -1,14 +1,22 @@
 // src/VideoPlayer.js
 import React from 'react';
+import './fourth.css';
+import bg from "../../assets/bg.jpg"
+
+import animationGif from '../../../../AI/celestial_animation.gif';
+import Header from '../../components/header/header';
 
 const VideoPlayer = () => {
     return (
         <div>
-            <h1>Celestial Animation</h1>
-            <video width="640" height="480" controls>
-                <source src="/animation" type="video/mp4" />
-                Your browser does not support the video tag.
-            </video>
+        <Header/>
+        <div className="allAboutUs">
+            
+            <img className="bg1" src={bg} alt="" />
+            <h5>Near-Earth Comets Motion Animation</h5>
+            
+            <img src={animationGif} alt="CelestialAnimation" width="640" height="480" />
+        </div>
         </div>
     );
 };

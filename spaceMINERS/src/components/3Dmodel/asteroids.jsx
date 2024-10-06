@@ -233,49 +233,32 @@ const Asteroids = () => {
         asteroids.push({ mesh: asteroidMesh, data: asteroid });
     
         // Create a sprite for the asteroid name
-        const sprite = createTextSprite(asteroid.object_name, radius);
+        const sprite = createTextSprite(asteroid.object_name);
         
         // Position the sprite just above the asteroid's height
-        sprite.position.set(
-            asteroidMesh.position.x, 
-            asteroidMesh.position.y + radius + 2, // Offset to position above the asteroid
-            asteroidMesh.position.z
-        );
+        sprite.position.set(asteroidMesh.position.x, asteroidMesh.position.y , asteroidMesh.position.z); // Adjust the height as needed
         scene.add(sprite);
     
         console.log(`Asteroid ${index} added to scene with data:`, asteroid); // Log each asteroid added
     });
     
     // Function to create a text sprite
-    function createTextSprite(message, asteroidRadius) {
+    function createTextSprite(message) {
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
-        
-        // Adjust canvas size based on text length
-        context.font = "32px Arial";
-        const textWidth = context.measureText(message).width;
-        canvas.width = textWidth + 20; // Add some padding
-        canvas.height = 64; // Adjust height to fit text size
-    
-        // Draw the text
         context.font = "32px Arial";
         context.fillStyle = "white";
-        context.fillText(message, 10, 50); // Adjust Y for vertical padding
+        context.fillText(message, 0, 50);
     
         const texture = new THREE.Texture(canvas);
         texture.needsUpdate = true;
     
-        // Create sprite material
         const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
         const sprite = new THREE.Sprite(spriteMaterial);
-    
-        // Scale sprite to match canvas size
-        const scaleX = textWidth / 10; // Adjust scaling factor to fit
-        const scaleY = canvas.height / 20;
-        sprite.scale.set(scaleX, scaleY, 1);
-    
+        sprite.scale.set(5, 2.5, 1); // Scale to fit the text size
         return sprite;
     }
+    
     
     // Function to compute asteroid position based on Keplerian elements
     function computeAsteroidPosition(asteroid, julianDate) {
