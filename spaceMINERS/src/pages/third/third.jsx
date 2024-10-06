@@ -60,7 +60,7 @@ const Third = () => {
                     <div className="About">
                         <img className="Aboutgp" src={groupphoto4} alt="NASA Logo" />
                         <p className='def'>
-                        <b>Mohammed El Bye</b>
+                        <b>Mohammed El Bey</b>
                         <br/>
                         Data engineering <br/>student at ENSMR(ex-ENIM)
                         </p>
