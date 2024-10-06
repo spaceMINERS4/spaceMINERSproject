@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import React from 'react';
 import Second from './pages/second/second';
+import Third from './pages/third/third';
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
         <Route path="/" element={<First />} />
         <Route path="/second" element={<Second />} />
+        <Route path="/third" element={<Third />} />
         </Routes>
       </Router>
       </div>
