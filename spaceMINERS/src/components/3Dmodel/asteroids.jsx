@@ -65,8 +65,9 @@ const Asteroids = () => {
     document.body.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    //const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 5000);
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
+// Increase `far` if the orbits are large and extend far from the camera
+
  // Adjusted FOV and far plane
     const orbit = new OrbitControls(camera, renderer.domElement);
     camera.position.set(0, -800, 320); // Adjusted camera position
