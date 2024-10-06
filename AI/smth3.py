@@ -5,7 +5,7 @@ from matplotlib.animation import FuncAnimation
 from datetime import datetime
 
 # Load the dataset
-df = pd.read_csv("convertcsv.csv")
+df = pd.read_csv("AI/convertcsv.csv")
 
 # Extract relevant orbital parameters into a new DataFrame
 relevant_columns = [
@@ -119,7 +119,7 @@ for index, row in celestial_df.iterrows():
         z_orbit.append(z)
     
     # Plot the orbit in 3D
-    ax.plot(x_orbit, y_orbit, z_orbit, 'r', alpha=0.5)
+    ax.plot(x_orbit, y_orbit, z_orbit, 'lightgrey', alpha=0.5)
 
 # Animation function
 def update(frame):
