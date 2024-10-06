@@ -26,6 +26,7 @@ import sunlight from '../../assets/Images/sunlight.png';
 import saturnring from '../../assets/Images/saturnring.png';
 import uranusring from '../../assets/Images/uranusring.png';
 import ORBID01 from '../../assets/Images/ORBID01.svg';
+import ORBID2 from '../../assets/Images/ORBID2.svg';
 
 
 // Keplerian elements for the planets
@@ -49,7 +50,7 @@ const Asteroids = () => {
     // Fetch asteroid data from the API
     axios.get('https://data.nasa.gov/resource/b67r-rgxc.json')
       .then(response => {
-        console.log('Fetched Asteroid Data:', response.data); // Log the asteroid data
+        //console.log('Fetched Asteroid Data:', response.data); // Log the asteroid data
         setAsteroidData(response.data); // Store the asteroid data
       })
       .catch(error => console.error('Error fetching asteroid data:', error));
@@ -64,9 +65,11 @@ const Asteroids = () => {
     document.body.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000); // Adjusted FOV and far plane
+    //const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 2000);
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 5000);
+ // Adjusted FOV and far plane
     const orbit = new OrbitControls(camera, renderer.domElement);
-    camera.position.set(0, -100, 20); // Adjusted camera position
+    camera.position.set(0, -800, 320); // Adjusted camera position
     orbit.update();
 
 
@@ -131,6 +134,7 @@ const Asteroids = () => {
         const uranusRing = new THREE.Mesh(uranusringGeometry, uranusringMaterial);
  
         const ORBID01Texture = new THREE.TextureLoader().load(ORBID01);
+        const ORBID02Texture = new THREE.TextureLoader().load(ORBID2);
  
         // Planet sizes (scaled for visibility)
         const planetSizes = {
@@ -218,7 +222,7 @@ const Asteroids = () => {
       scene.add(asteroidMesh);
       asteroids.push({ mesh: asteroidMesh, data: asteroid });
 
-      console.log(`Asteroid ${index} added to scene with data:`, asteroid); // Log each asteroid added
+      //console.log(`Asteroid ${index} added to scene with data:`, asteroid); // Log each asteroid added
     });
 
     // Function to compute asteroid position based on Keplerian elements
@@ -307,15 +311,42 @@ const Asteroids = () => {
         scene.add(ORBID); 
           
     });
+      let number01 = 1;
       asteroids.forEach(({ mesh, data }, index) => {
         const position = computeAsteroidPosition(data, julianDate);
         mesh.position.set(position.x, position.y, position.z);
 
         // Rotate each asteroid
-        mesh.rotation.x += 0.01; // Adjust speed as necessary
+        /* mesh.rotation.x += 0.01; // Adjust speed as necessary
         mesh.rotation.y += 0.01; // Adjust speed as necessary
+         */
+        //console.log(`Asteroid ${index} position:`, position);  // Log the position
+        //if ( number01 < 50){
+          
+        const taille2 = Math.sqrt(position.x**2 + position.y**2 + position.z**2) * 2 ;
+        const angz = Math.atan2(position.y, position.x);
+        const temp = Math.sqrt(position.x**2 + position.y**2);
+        const angy = Math.atan2(position.z, temp);
+
         
-        console.log(`Asteroid ${index} position:`, position);  // Log the position
+        const ORBID02Geometry = new THREE.PlaneGeometry(taille2, taille2); 
+        const ORBID02Material = new THREE.MeshBasicMaterial({
+            map: ORBID02Texture,
+            transparent: true,  
+            side: THREE.DoubleSide 
+        });
+
+        const ORBID02 = new THREE.Mesh(ORBID02Geometry, ORBID02Material);
+        
+        ORBID02.position.set(0, 0, 0);  
+        ORBID02.rotateY(angy);
+        ORBID02.rotateZ(angz);
+        
+
+        scene.add(ORBID02); 
+        number01 = number01 + 1;
+        //}
+
       });
       orbit.update(); // Update orbit controls in the render loop
     
