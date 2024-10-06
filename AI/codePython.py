@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from datetime import datetime
+import os
 
 # Load the dataset
 df = pd.read_csv("convertcsv.csv")
@@ -120,7 +121,7 @@ for index, row in celestial_df.iterrows():
     
     # Plot the orbit in 3D
     ax.plot(x_orbit, y_orbit, z_orbit, 'lightgrey', alpha=0.5)
-
+plt.style.use('seaborn-darkgrid')
 # Animation function
 def update(frame):
     x_data, y_data, z_data = [], [], []
@@ -149,5 +150,10 @@ def update(frame):
 duration_days = 3000  # Total animation duration
 ani = FuncAnimation(fig, update, frames=range(duration_days), blit=False, interval=200)
 
+# Save the animation as an MP4 using ffmpeg
+output_path = "celestial_animation.gif"
+ani.save(output_path, writer='pillow', fps=30)
+
 # Show the animation
 plt.show()
+

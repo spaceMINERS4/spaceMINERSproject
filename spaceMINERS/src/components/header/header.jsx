@@ -15,7 +15,7 @@ const Header = () => {
            
             <div className='header3'>
                 {/*<h4>Filter</h4>*/}
-                <h4><a href="">Predict</a></h4>
+                <h4><a href="/fourth">Predict</a></h4>
                 <h4><a href="/third">About us</a></h4>
             </div>
         </div>
