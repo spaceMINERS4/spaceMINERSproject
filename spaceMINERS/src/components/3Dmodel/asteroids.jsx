@@ -209,22 +209,54 @@ const Asteroids = () => {
     
     // Create asteroid spheres and add to scene
     const asteroids = [];
-    asteroidData.forEach((asteroid, index) => {
-        const asteroidGeo = new THREE.SphereGeometry(Math.random() * 1.5 + 0.1, 32, 32); // Random radius for each asteroid
-        const asteroidMesh = new THREE.Mesh(asteroidGeo, asteroidMaterial);
-        const position = {
-          x: (Math.random() - 0.5) * 200, // Random position within -200 to 200
-          y: (Math.random() - 0.5) * 200, // Random position within -200 to 200
-          z: (Math.random() - 0.5) * 200  // Random position within -200 to 200
-        };
+asteroidData.forEach((asteroid, index) => {
+    // Create a random radius for each asteroid
+    const radius = Math.random() * 1.5 + 0.1; // Random radius for asteroid
+    const asteroidGeo = new THREE.SphereGeometry(radius, 32, 32);
+    const asteroidMesh = new THREE.Mesh(asteroidGeo, asteroidMaterial);
+    
+    // Generate a random position within a specified range
+    const position = {
+        x: (Math.random() - 0.5) * 200,
+        y: (Math.random() - 0.5) * 200,
+        z: (Math.random() - 0.5) * 200
+    };
 
-        asteroidMesh.position.set(position.x, position.y, position.z);
-      scene.add(asteroidMesh);
-      asteroids.push({ mesh: asteroidMesh, data: asteroid });
+    // Set the asteroid's position
+    asteroidMesh.position.set(position.x, position.y, position.z);
+    
+    // Add the asteroid mesh to the scene
+    scene.add(asteroidMesh);
+    
+    // Store the asteroid and its data
+    asteroids.push({ mesh: asteroidMesh, data: asteroid });
 
-      //console.log(`Asteroid ${index} added to scene with data:`, asteroid); // Log each asteroid added
-    });
+    // Create a sprite for the asteroid name
+    const sprite = createTextSprite(asteroid.object_name);
+    
+    // Position the sprite just above the asteroid's height
+    sprite.position.set(asteroidMesh.position.x, asteroidMesh.position.y , asteroidMesh.position.z); // Adjust the height as needed
+    scene.add(sprite);
 
+    console.log(`Asteroid ${index} added to scene with data:`, asteroid); // Log each asteroid added
+});
+
+// Function to create a text sprite
+function createTextSprite(message) {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    context.font = "32px Arial";
+    context.fillStyle = "white";
+    context.fillText(message, 0, 50);
+
+    const texture = new THREE.Texture(canvas);
+    texture.needsUpdate = true;
+
+    const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+    const sprite = new THREE.Sprite(spriteMaterial);
+    sprite.scale.set(5, 2.5, 1); // Scale to fit the text size
+    return sprite;
+}
     // Function to compute asteroid position based on Keplerian elements
     function computeAsteroidPosition(asteroid, julianDate) {
         // Ensure essential data is available and valid
