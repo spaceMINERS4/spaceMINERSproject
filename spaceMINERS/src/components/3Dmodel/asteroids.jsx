@@ -6,9 +6,9 @@ import axios from 'axios';
 import starsTexture from '../../assets/Images/stars.jpg';
 import asteroidTexture from '../../assets/Images/asteroid.jpg'; // Ensure correct path
 //i imported these idk if i need them
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+//import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+//import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+//import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 
 // Import textures
 
@@ -265,6 +265,8 @@ const Asteroids = () => {
       
         return { x: xeclip, y: yeclip, z: zeclip };
       }
+
+      
       
     // Animation loop
     const clock = new THREE.Clock();
